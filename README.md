@@ -1,7 +1,7 @@
 # cloud-arch-internship
 This repository is dedicated to the development of a comprehensive cloud architecture designed during my internship program. The project aims to build a serverless scalable, robust and secure  distributed system to compute the long-running executions
 
-#Architecture Overview
+**Architecture Overview**
 
 Application → API Gateway:
 The application sends a REST API request to Amazon API Gateway / Google API Gateway
@@ -24,16 +24,16 @@ The 2nd  function sends the final result back to the API Gateway.
 API Gateway → Application:
 The API Gateway then sends the response back to the application.
 
-#Technologies
+**Technologies**
 
 Cloud Provider: Google Cloud Platform
 Scripting: Python
 
-#Collaboration Guidelines
+**Collaboration Guidelines**
 
 Code Reviews: All merges require pull requests and code reviews.
 Commit Conventions: Use conventional commits for a clear history and easy navigation
 
-#Contact
+**Contact**
 
 Intern Developer: Mohammad Tayebi - Mo.tayebi@outlook.com
