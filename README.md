@@ -9,14 +9,11 @@ The application sends a REST API request to Amazon API Gateway / Google API Gate
 API Gateway → 1st Lambda Function/ Google Function:
 The API Gateway routes the request to the 1st Lambda function.
 
-1st Function → EKS/GKE or 3rd  Function:
+1st Function → EKS/GKE:
 The 1st  function decides the task type and forwards it to either EKS/GKE (for long-lived tasks) or another function (for short-lived tasks).
 
 EKS/GKE → The 2nd Function (for Long-lived Tasks):
 Post-processing, EKS/GKE sends the results to the 2nd  function.
-
-3rd Function → 2nd  Function (for Short-lived Tasks):
-The 3rd  function directly sends the processed result to the 2nd function.
 
 2nd  Function → API Gateway:
 The 2nd  function sends the final result back to the API Gateway.
