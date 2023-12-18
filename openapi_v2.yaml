@@ -1,0 +1,50 @@
+swagger: '2.0'
+info:
+  title: internesteco - The API with Google Cloud Functions
+  description: API to interface between clients and Google Cloud Functions
+  version: 1.0.0
+basePath: /v1
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  /getData:
+    get:
+      summary: Retrieve data from a Google Cloud Function
+      operationId: getData
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/getDataFunction
+      responses:
+        '200':
+          description: Successfully retrieved data
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+  /postData:
+    post:
+      summary: Send data to a Google Cloud Function and receive processed data
+      operationId: postData
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/postDataFunction
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              input:
+                type: string
+      responses:
+        '200':
+          description: Successfully processed data
+          schema:
+            type: object
+            properties:
+              result:
+                type: string
