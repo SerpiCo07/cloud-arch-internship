@@ -1,8 +1,11 @@
-import flask
 import zipfile
 import io
 import json
-import requests
+from google.cloud import pubsub_v1
+
+# Initialize the Pub/Sub client
+publisher = pubsub_v1.PublisherClient()
+topic_name = 'projects/mainproject-01/topics/mainFunc'  # Replace with your GCP project ID and Pub/Sub topic ID
 
 def extract_json_from_zip(zip_file):
     with zipfile.ZipFile(zip_file, 'r') as z:
@@ -10,41 +13,22 @@ def extract_json_from_zip(zip_file):
             with z.open(file_name) as f:
                 yield json.load(f)
 
-def forward_data_to_gke(json_data):
-    gke_endpoint = "http://34.17.48.202/data"  # Replace with your GKE service endpoint
-    response = requests.post(gke_endpoint, json=json_data)
-    return response.status_code, response.text
+def forward_data_to_pubsub(json_data):
+    data_str = json.dumps(json_data)  # Convert JSON data to a string
+    data_bytes = data_str.encode("utf-8")  # Convert string to bytes
+    future = publisher.publish(topic_name, data_bytes)  # Publish to Pub/Sub
+    return future.result()  # Wait for publish to complete
 
 def process_zip_file(request):
-    # Ensure that we have a file in the request
-    if 'file' not in request.files:
-        return "No file part in the request", 400
-    
-    file = request.files['file']
-    
-    # If the user does not select a file, the browser submits an
-    # empty file without a filename.
-    if file.filename == '':
-        return "No selected file", 400
-    
-    if file and file.filename.endswith('.zip'):
-        try:
-            # Process the zipped file
-            for json_data in extract_json_from_zip(file):
-                status_code, response_text = forward_data_to_gke(json_data)
-                if status_code != 200:
-                    return f"Failed to forward data to GKE: {response_text}", status_code
-            
-            return "File processed and data forwarded to GKE", 200
+    if not request.data:
+        return "No data in the request", 400
 
-        except Exception as e:
-            return f"An error occurred: {str(e)}", 500
-    else:
-        return "Unsupported file format", 400
-
-# Define the Flask app and the route
-app = flask.Flask(__name__)
-
-@app.route('/process-zip', methods=['POST'])
-def process_zip_route():
-    return process_zip_file(flask.request)
+    try:
+        zip_file = io.BytesIO(request.data)
+        for json_data in extract_json_from_zip(zip_file):
+            forward_data_to_pubsub(json_data)
+        return "File processed and data forwarded to Pub/Sub", 200
+    except zipfile.BadZipFile:
+        return "Invalid or corrupt zip file", 400
+    except Exception as e:
+        return f"An error occurred: {str(e)}", 500
