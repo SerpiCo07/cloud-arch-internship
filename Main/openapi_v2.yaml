@@ -4,26 +4,34 @@ info:
   description: API to interface between clients and Google Cloud Functions
   version: 1.0.0
 basePath: /v1
-schemes:
-  - https
 produces:
   - application/json
 consumes:
   - application/json
 paths:
-  /getData:
-    get:
-      summary: Retrieve data from a Google Cloud Function
-      operationId: getData
+  /uploadData:
+    post:
+      summary: Receive zip data from an application and process it
+      operationId: uploadData
       x-google-backend:
-        address: https://europe-west1-mainproject-01.cloudfunctions.net/getDataFunction
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/processZipDataFunction
+      consumes:
+        - application/zip
+      parameters:
+        - in: body
+          name: file
+          required: true
+          description: Zip file containing data
+          schema:
+            type: string
+            format: binary
       responses:
         '200':
-          description: Successfully retrieved data
+          description: Successfully processed data
           schema:
             type: object
             properties:
-              data:
+              result:
                 type: string
   /postData:
     post:
