@@ -1,0 +1,125 @@
+swagger: '2.0'
+info:
+  title: internesteco - The API with Google Cloud Functions
+  description: API to interface between clients and Google Cloud Functions
+  version: 1.0.0
+basePath: /v1
+schemes:
+  - https
+produces:
+  - application/json
+  - application/zip
+consumes:
+  - application/json
+paths:
+  /appZip:
+    post:
+      summary: Receive a base64 encoded string of the zip file from the application
+      operationId: appzip
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: file
+          required: true
+          description: Base64 encoded string of the zip file
+          schema:
+            $ref: '#/definitions/appzip'
+      responses:
+        '200':
+          description: File uploaded successfully
+
+      security:
+        - api_key: []
+
+  /forwardZip:
+    post:
+      summary: Forward zip file to the first Google Cloud Function
+      operationId: forwardzip
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-1
+      consumes:
+        - application/octet-stream
+      parameters:
+        - in: body
+          name: file
+          required: true
+          description: Zip file to be forwarded
+          schema:
+            $ref: '#/definitions/forwardzip'
+      responses:
+        '200':
+          description: Zip file processed successfully
+      security:
+        - api_key: []
+
+  /systemZip:
+    post:
+      summary: Receive a zip file from the second Google Cloud Function
+      operationId: systemzip
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-2
+      produces:
+        - application/zip
+      consumes:
+        - application/zip
+      parameters:
+        - in: body
+          name: systemzip
+          required: true
+          description: zip file is received from the second Google Cloud Function
+          schema:
+            $ref: '#/definitions/systemzip'
+      responses:
+        '200':
+          description: Zip file received successfully
+        '404':
+          description: Zip file not found
+      security:
+        - api_key: []
+
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: X-API-KEY
+    in: header
+
+#definitions section:
+
+definitions:
+ 
+ #The first object
+  appzip:
+    type: object
+    properties:
+      fileContent:
+        type: string
+        format: byte
+    required:
+      - fileContent
+ #The second object
+  forwardzip:
+    type: object
+    properties:
+      fileContent:
+        type: string
+        format: byte
+      format:
+        type: string
+    required:
+      - fileContent
+      - format
+ #The third object
+  systemzip:
+    type: object
+    properties:
+      fileContent:
+        type: string
+        format: byte
+      format:
+        type: string
+    required:
+      - fileContent
+      - format
+      
+  

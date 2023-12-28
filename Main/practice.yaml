@@ -1,0 +1,50 @@
+swagger: '2.0'    #Metadata about the API
+info :
+  title: simulation
+  description: An API to undrestand more about the openAPI specification
+  version: 1.0.0
+#Base URL
+basePath: /v1
+schemes:
+    - https
+#Consumes and Produces
+consumes:
+    - application/json
+produces:
+    - application/json
+#The first Endpoint
+paths:
+ /input: #Name of the endpoint 
+    get:  #HTTP method-operation
+      summary: Get the input from the user #Summary of the operation
+      operationId: getInput #Unique identifier for the operation
+      tags:
+        - user #Tags for the operation
+      produces:
+        - application/json #send the response in JSON format
+      parameters:
+        - name: input
+          in: path
+          description: Input from the user
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Input received successfully
+          schema:
+                $ref: '#/definitions/user'
+      externalDocs:
+        url: https://api.example.com/docs/user-operations/
+        description: Learn more about user who does have access to the API
+#The second Endpoint
+definitions:
+  user:
+    type: object
+    properties: 
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+      - id
+      - name

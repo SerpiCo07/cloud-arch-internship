@@ -24,7 +24,7 @@ paths:
           name: file
           required: true
           description: Zip file to be uploaded
-          type: file
+          type: string
       responses:
         '200':
           description: File uploaded successfully
@@ -34,7 +34,7 @@ paths:
       summary: Forward zip file to the first Google Cloud Function
       operationId: processZip
       x-google-backend:
-        address: https://europe-west1-mainproject-01.cloudfunctions.net/firstFunction
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-1
       consumes:
         - application/octet-stream
       parameters:
@@ -54,13 +54,13 @@ paths:
       summary: Receive a zip file from the second Google Cloud Function
       operationId: downloadZip
       x-google-backend:
-        address: https://europe-west1-mainproject-01.cloudfunctions.net/secondFunction
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-2
       produces:
         - application/zip
       responses:
         '200':
           description: Zip file received successfully
           schema:
-            type: file
+            type: string
         '404':
           description: Zip file not found
