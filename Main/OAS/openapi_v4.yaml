@@ -4,6 +4,10 @@ info:
   description: API to interface between clients and Google Cloud Functions
   version: 1.0.0
 basePath: /v1
+#Apply the security globally
+security:
+  - APIKeyHeader: []
+
 schemes:
   - https
 produces:
@@ -79,10 +83,16 @@ paths:
         - api_key: []
 
 securityDefinitions:
-  api_key:
+  # X-API-Key: abcdef12345
+  APIKeyHeader:
     type: apiKey
-    name: X-API-KEY
     in: header
+    name: X-API-Key
+  # /path?api_key=abcdef12345  
+  APIQueryParam:
+    type: apiKey
+    in: query
+    name: api_key
 
 #definitions section:
 
