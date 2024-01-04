@@ -54,6 +54,8 @@ paths:
       responses:
         '200':
           description: Zip file processed successfully
+        '401':
+          $ref: '#/responses/UnauthorizedError'
       security:
         - api_key: []
 
@@ -140,5 +142,12 @@ definitions:
     required:
       - fileContent
       - format
-      
-  
+
+#Global responses
+responses:
+  UnauthorizedError:
+    description:  Authentication information is missing or invalid
+    headers:
+      wwwAuthenticate:
+        type: string
+        
