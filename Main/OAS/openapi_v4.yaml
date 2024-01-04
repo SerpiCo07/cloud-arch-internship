@@ -21,7 +21,7 @@ paths:
       summary: Receive a base64 encoded string of the zip file from the application
       operationId: appzip
       consumes:
-        - application/json
+        - application/zip
       parameters:
         - in: body
           name: file
@@ -43,7 +43,7 @@ paths:
       x-google-backend:
         address: https://europe-west1-mainproject-01.cloudfunctions.net/function-1
       consumes:
-        - application/octet-stream
+        - application/zip
       parameters:
         - in: body
           name: file
@@ -105,8 +105,13 @@ definitions:
       fileContent:
         type: string
         format: byte
+        description: Base64-encoded string representing the contents of the ZIP file
+      format:
+        type: string
+        description: the format of the received file
     required:
       - fileContent
+      - format
  #The second object
   forwardzip:
     type: object
@@ -114,8 +119,10 @@ definitions:
       fileContent:
         type: string
         format: byte
+        description: Base64-encoded string representing the contents of the ZIP file
       format:
         type: string
+        description: the format of the file to be forwarded
     required:
       - fileContent
       - format
@@ -126,8 +133,10 @@ definitions:
       fileContent:
         type: string
         format: byte
+        description: Base64-encoded string representing the contents of the ZIP file
       format:
         type: string
+        description: the format of the file to be received
     required:
       - fileContent
       - format
