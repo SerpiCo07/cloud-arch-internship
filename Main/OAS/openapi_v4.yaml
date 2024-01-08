@@ -4,17 +4,17 @@ info:
   description: API to interface between clients and Google Cloud Functions
   version: 1.0.0
 basePath: /v1
-#Apply the security globally
-security:
-  - APIKeyHeader: []
-
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: query
 schemes:
   - https
 produces:
-  - application/json
   - application/zip
 consumes:
-  - application/json
+  - application/zip
 paths:
   /appZip:
     post:
@@ -28,7 +28,7 @@ paths:
           required: true
           description: Base64 encoded string of the zip file
           schema:
-            $ref: '#/definitions/appzip'
+            $ref: '#/definitions/processzip'
       responses:
         '200':
           description: File uploaded successfully
@@ -50,7 +50,7 @@ paths:
           required: true
           description: Zip file to be forwarded
           schema:
-            $ref: '#/definitions/forwardzip'
+            $ref: '#/definitions/processzip'
       responses:
         '200':
           description: Zip file processed successfully
@@ -84,24 +84,12 @@ paths:
       security:
         - api_key: []
 
-securityDefinitions:
-  # X-API-Key: abcdef12345
-  APIKeyHeader:
-    type: apiKey
-    in: header
-    name: X-API-Key
-  # /path?api_key=abcdef12345  
-  APIQueryParam:
-    type: apiKey
-    in: query
-    name: api_key
-
 #definitions section:
 
 definitions:
  
  #The first object
-  appzip:
+  processzip:
     type: object
     properties:
       fileContent:
@@ -114,21 +102,8 @@ definitions:
     required:
       - fileContent
       - format
+
  #The second object
-  forwardzip:
-    type: object
-    properties:
-      fileContent:
-        type: string
-        format: byte
-        description: Base64-encoded string representing the contents of the ZIP file
-      format:
-        type: string
-        description: the format of the file to be forwarded
-    required:
-      - fileContent
-      - format
- #The third object
   systemzip:
     type: object
     properties:
@@ -150,4 +125,5 @@ responses:
     headers:
       wwwAuthenticate:
         type: string
+        
         
