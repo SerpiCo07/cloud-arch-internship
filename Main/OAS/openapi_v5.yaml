@@ -50,7 +50,7 @@ paths:
       description: Receive a base64 encoded string (zip file) from the application
       operationId: appzip
       x-google-backend:
-        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-1
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/testproxy
       consumes:
         - application/zip
       parameters:

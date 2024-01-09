@@ -96,4 +96,8 @@ Grant the pub/sub publisher role to the function
         in order to tell the GCF the topic to publish the files
       - The entry point that is need while creating the GCF  is the main function
   - Deploy the script on GCF
+  - The requirements.txt must include all the libraries and dependencies that are required 
+    at the run time 
+      - google-cloud-pubsub== [WHAT EVER IS THE VERSION ON YOUR SYSTEM] 
+        google-cloud-pubsub==2.19.*
  
