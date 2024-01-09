@@ -70,7 +70,7 @@ paths:
       x-google-quota:
         metricCosts:
           "get-requests": 1
-      parameters: []
+      parameters: []    # indicates that the GET /user operation does not require any parameters.
       responses:
         200:
           description: "successful operation"
