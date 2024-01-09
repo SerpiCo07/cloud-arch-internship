@@ -90,4 +90,10 @@ Grant the pub/sub publisher role to the function
   - While creating the google cloud function notice 
       - Allow unauthorized invocations
       - under Runtime, build, connections and security setting choose the correct service account
-  
+  - The script contains 
+      - google-cloud-pub/sub library
+      - The topic_name from Google Cloud Pub/Sub is copied and  mentioned in the script
+        in order to tell the GCF the topic to publish the files
+      - The entry point that is need while creating the GCF  is the main function
+  - Deploy the script on GCF
+ 
