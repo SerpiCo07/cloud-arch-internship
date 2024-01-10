@@ -1,4 +1,4 @@
-# An bried explanation on different parts of openAPI specification
+# An brief explanation on different parts of openAPI specification
 # version
 On top of everything we the version of the openAPI specification is written
 
