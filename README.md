@@ -1,5 +1,4 @@
-In this doc I explained the diffrent parts of the openAPI specification (Swagger specification version 2) and their usage
-
+# An bried explanation on different parts of openAPI specification
 # version
 On top of everything we the version of the openAPI specification is written
 
