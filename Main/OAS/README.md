@@ -115,10 +115,10 @@ Since we want to avoid adding more services like a VPC connector and we need our
 Remember: 
  even with "Allow All Traffic," it's crucial to manage access and permissions carefully. Make sure that only the necessary identities (like your API Gateway) have the IAM roles and permissions needed to invoke the Cloud Function.
 
-# The Main Concern - How to notify the application about failed messages
-'''
+# The Main Concern - How to notify the application about the failed messages
+
 still we do not know how sholud application get notified when one or more zip files end up in DLQ 
-'''
+
 we sholud consider different failure scenarios such as damaged file, Network errors, bad comprassion etc
 
 # Some Ideas for updating the whole System Design
