@@ -100,4 +100,27 @@ Grant the pub/sub publisher role to the function
     at the run time 
       - google-cloud-pubsub== [WHAT EVER IS THE VERSION ON YOUR SYSTEM] 
         google-cloud-pubsub==2.19.*
+### Internal Traffic Only and Allow unauthenticated invocations
+
+API Gateway is considered as an external service so if we set "only internall traffic" , we need a VPC connector route from api gateway to GCF !
+
+If we set "Allow authentication" it doesn't mean each time api gateway wants to send a file to GCF they need to check the api key.
+
+Instead of an API key, the API Gateway uses a Google-signed identity token for the authentication. This token is obtained from Google's authentication service and includes the identity of the caller (in this case, the API Gateway) - authentication with identity token
+
+Since we want to avoid adding more services like a VPC connector and we need our API Gateway to invoke a Google Cloud Function (GCF) directly, we should choose : 
+-Require Authentication
+-Allow All Traffic (instead of Internal Traffic Only)
+
+Remember: 
+ even with "Allow All Traffic," it's crucial to manage access and permissions carefully. Make sure that only the necessary identities (like your API Gateway) have the IAM roles and permissions needed to invoke the Cloud Function.
+
+# The Main Concern - How to notify the application about failed messages
+'''
+still we do not know how sholud application get notified when one or more zip files end up in DLQ 
+'''
+we sholud consider different failure scenarios such as damaged file, Network errors, bad comprassion etc
+
+# Some Ideas for updating the whole System Design
+## A Storage between Application and API Gateway
  
