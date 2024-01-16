@@ -30,5 +30,5 @@ class PubSubPublisher:
             return f'An error occurred: {e}', 500
 
 def main(request):
-    publisher = PubSubPublisher('projects/mainproject-01/topics/pubproxy')
+    publisher = PubSubPublisher('projects/app-internships/topics/testapp')
     return publisher.publish_zip_to_topic(request)

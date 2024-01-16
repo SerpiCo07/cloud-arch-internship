@@ -115,6 +115,34 @@ Since we want to avoid adding more services like a VPC connector and we need our
 Remember: 
  even with "Allow All Traffic," it's crucial to manage access and permissions carefully. Make sure that only the necessary identities (like your API Gateway) have the IAM roles and permissions needed to invoke the Cloud Function.
 
+
+### How to send request to a GCF when we "ALLOW AUTHENTICATED INVOCATIONS"
+
+When during the creation time we choose "Allow authenticated invocations", we cannot acceess or test the GCF using a curl command easily.
+
+We need some how show that we are authorized to access it, I tried everything from different service account with different role to api key even creating another GCF to invoke the desired function while non of them were sucessful. At the end I undrestood GCF use Oauth authentication tokens to verify the user. Hence : 
+
+-The command below must be used in every call for GCF
+
+```-H "Authorization: bearer $(gcloud auth print-identity-token)"```
+
+-Let's look at it in details :
+  - "Authorization: bearer $(gcloud auth print-identity-token)":
+    This sets the Authorization header to use a bearer token for authentication.
+    - $(gcloud auth print-identity-token): 
+      This part is a shell command substitution. It runs the gcloud auth print-identity-token command, which prints an identity token for the current authenticated user in Google Cloud SDK. The result (token) is then included in the Authorization header.
+
+
+-GET :
+  ```curl -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west1-mainproject-01.cloudfunctions.net/testproxy```
+
+-POST :
+  ```curl -X POST -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west1-mainproject-01.cloudfunctions.net/testproxy ```
+
+-POST + Path of the file :
+    ```curl -X POST -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west1-mainproject-01.cloudfunctions.net/testproxy -H "Content-Type: multipart/form-data"  -F "file=@/home/devboy/Downloads/waterDat.zip"```
+
+
 # The Main Concern - How to notify the application about the failed messages
 
 still we do not know how sholud application get notified when one or more zip files end up in DLQ 
@@ -124,3 +152,5 @@ we sholud consider different failure scenarios such as damaged file, Network err
 # Some Ideas for updating the whole System Design
 ## A Storage between Application and API Gateway
  
+
+

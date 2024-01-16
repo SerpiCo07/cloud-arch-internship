@@ -1,7 +1,7 @@
 from urllib import response
 import requests
 
-url='https://europe-north1-mainproject-01.cloudfunctions.net/test-test'
+url='https://europe-west1-mainproject-01.cloudfunctions.net/testproxy'
 file_path='/home/devboy/Downloads/waterDat.zip'
 
 #open the file in the binary mode and send it within the payload
