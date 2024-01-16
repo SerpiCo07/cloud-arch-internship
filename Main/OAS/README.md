@@ -134,14 +134,32 @@ We need some how show that we are authorized to access it, I tried everything fr
 
 
 -GET :
-  ```curl -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west1-mainproject-01.cloudfunctions.net/testproxy```
+  ```curl -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west12-app-internships.cloudfunctions.net/function-proxy```
 
 -POST :
-  ```curl -X POST -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west1-mainproject-01.cloudfunctions.net/testproxy ```
+  ```curl -X POST -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west12-app-internships.cloudfunctions.net/function-proxy ```
 
 -POST + Path of the file :
-    ```curl -X POST -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west1-mainproject-01.cloudfunctions.net/testproxy -H "Content-Type: multipart/form-data"  -F "file=@/home/devboy/Downloads/waterDat.zip"```
+    ```curl -X POST -H "Authorization: bearer $(gcloud auth print-identity-token)" https://europe-west12-app-internships.cloudfunctions.net/function-proxy -H "Content-Type: multipart/form-data"  -F "file=@/home/devboy/Downloads/waterDat.zip"```
 
+# Pub/Sub gcloud command 
+
+- Create Topic
+
+```gcloud pubsub topics create [topic_name]```
+- Create Subscription
+
+```gcloud pubsub subscriptions create [subscription_name] --topic=[topic_name]```
+- Publish a message
+
+```gcloud pubsub topics publish topic_name --message="Your maessage"```
+- Receive a message
+
+```gcloud pubsub subscriptions pull subscription_name --auto-ack```
+
+### How to pull messages from a topic using subscription (Pub/Sub)
+
+gcloud pubsub subscriptions pull app-files-sub --auto-ack
 
 # The Main Concern - How to notify the application about the failed messages
 
