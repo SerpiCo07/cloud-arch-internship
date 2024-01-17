@@ -157,9 +157,14 @@ We need some how show that we are authorized to access it, I tried everything fr
 
 ```gcloud pubsub subscriptions pull subscription_name --auto-ack```
 
-### How to pull messages from a topic using subscription (Pub/Sub)
+## Testing the api gateway + GCF + Pub/sub
 
-gcloud pubsub subscriptions pull app-files-sub --auto-ack
+api_key (it's mandatory to work with api gateway) : AIzaSyDimOlkdTKKquS9kBSUi_-L8til8snMUIU
+
+curl -i "https://app-gateway-cv42qqas.ew.gateway.dev/v1/appZip?apikey=AIzaSyDimOlkdTKKquS9kBSUi_-L8til8snMUIU
+
+curl -i -X POST -H "Content-Type: multipart/formdata" "https://app-gateway-cv42qqas.ew.gateway.dev" -F "file=@/home/devboy/Downloads/waterDat.zip"
+
 
 # The Main Concern - How to notify the application about the failed messages
 
@@ -170,5 +175,4 @@ we sholud consider different failure scenarios such as damaged file, Network err
 # Some Ideas for updating the whole System Design
 ## A Storage between Application and API Gateway
  
-
-
+In our last meeting, we decided on setting up a separate cloud storage for the application to upload files. This storage will trigger a REST request with the file's location or UUID through the API gateway to the cluster upon new events. The cluster will then directly retrieve the file from the storage. This approach ensures that files are transferred directly to the cluster, bypassing other services, which is a significant advantage.
