@@ -1,36 +1,17 @@
-# cloud-arch-internship
-This repository is dedicated to the development of a comprehensive cloud architecture designed during my internship program. The project aims to build a serverless scalable, robust and secure  distributed system to compute the long-running executions
+In this Documention I will write step by step of my jeourny from creating to testing of Google cloud storage 
 
-**Architecture Overview**
+## Python script to Upload/Download a file from a bucket
 
-Application → API Gateway:
-The application sends a REST API request to Amazon API Gateway / Google API Gateway
+First of all we need to make sure two APIs are enabled 
+    -Google Cloud Storage
+    -Google Cloud Storage JSON API
 
-API Gateway → 1st Lambda Function/ Google Function:
-The API Gateway routes the request to the 1st Lambda function.
+Then, we need to create a new service account with the following permissions 
+    -storage object creater
+    -storage object admin
 
-1st Function → EKS/GKE:
-The 1st  function decides the task type and forwards it to either EKS/GKE (for long-lived tasks) or another function (for short-lived tasks).
+Afterwards,by clicking on the sevice account we created
+    -Under the "key" toolbar >> "Add Key" >> "Create new key" >> key type : JSOn
+    -Download and copy its path in the sctipt that we wrote for cloud storage clinet
 
-EKS/GKE → The 2nd Function (for Long-lived Tasks):
-Post-processing, EKS/GKE sends the results to the 2nd  function.
-
-2nd  Function → API Gateway:
-The 2nd  function sends the final result back to the API Gateway.
-
-API Gateway → Application:
-The API Gateway then sends the response back to the application.
-
-**Technologies**
-
-Cloud Provider: Google Cloud Platform
-Scripting: Python
-
-**Collaboration Guidelines**
-
-Code Reviews: All merges require pull requests and code reviews.
-Commit Conventions: Use conventional commits for a clear history and easy navigation
-
-**Contact**
-
-Intern Developer: Mohammad Tayebi - Mo.tayebi@outlook.com
+## What is Workload Identity Federation
