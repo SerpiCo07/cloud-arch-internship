@@ -37,3 +37,10 @@ The thing right now I am thinking about is having uploaded a file on our bucket 
 Firstly, I'd check if GCS does have any integrated feature to help us with this matter
 
 On the other hand,I'm thinking of creating a cloud storage triggered fucntion to hand over the files to the api gateway
+
+### The specific roles of the Google Cloud Function to watch storage and send data directly to pub/sub
+These roles are required to be granted to the service account of the google cloud function 
+    - Pub/Sub Publisher
+    - Service Account Token Creator
+    - Eventarc Event Receiver
+    - Storage Object Viewer
