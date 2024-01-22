@@ -17,8 +17,8 @@ Afterwards,by clicking on the sevice account we created
 ### Secure the service accout JSON Key
 In order to avoid hardcoding the path of the Key in our code, it'd be better if set it a environmetn variable using the following command on the shell :
 
-```export GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/service-account-key.json
-```
+    export GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/service-account-key.json
+
 Instead, in script we just read the environment variable.
 
 ### storage_client_package
