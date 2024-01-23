@@ -12,8 +12,8 @@ def main():
     gcs_manager.create_bucket(bucket_name)
     """
     # Upload a file
-    file_path = '/home/devboy/Downloads/waterDat.zip'
-    gcs_manager.upload_to_bucket('water data', file_path, bucket_name)
+    file_path = '/home/devboy/Downloads/estat_tec00121.tsv.gz'
+    gcs_manager.upload_to_bucket('price volume ', file_path, bucket_name)
     """
     # Download a file
     download_path = os.path.join(os.getcwd(), 'waterDat.zip')

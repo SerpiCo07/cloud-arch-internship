@@ -21,6 +21,12 @@ In order to avoid hardcoding the path of the Key in our code, it'd be better if 
 
 Instead, in script we just read the environment variable.
 
+## The Required roles of the Google Cloud Storage-bucket in order to upload/download file 
+    -roles/storage.objectViewer
+    -roles/storage.objectCreator
+    -roles/storage.objectAdmin
+    -roles/storage.admin
+
 ### storage_client_package
 This package is made of two python files 
     - google_cloud_storage_manager.py 
@@ -29,6 +35,9 @@ This package is made of two python files
     - main_script.py 
         - Where an instance of the oogleCloudStorageManager class is created to do one or more operations
         - The one we customize and run each time according to our needs
+#### Upload the file using main_script
+
+python3 -m storage_client_pack.main_script
 
 ## How to notify the API Gateway a new file is uploaded in the cloud storage
 
@@ -44,3 +53,36 @@ These roles are required to be granted to the service account of the google clou
     - Service Account Token Creator
     - Eventarc Event Receiver
     - Storage Object Viewer
+### The especial roles that Google Cloud Function must have
+ #### role/run.invoker
+ While checking the permission of the GCF is in charge of being triggered by cloud storage and send a message to pubsub, you will see a Warning that says you need to run thi command : 
+
+ gcloud functions add-invoker-policy-binding function-storage-to-pubsub \
+      --region="europe-west12" \
+      --member="MEMBER_NAME"
+
+It's not correct command,since valid IAM member formats typically include:
+
+-User: user:email@example.com
+-Service Account: serviceAccount:service-account-email@example.iam.gserviceaccount.com
+-Google Group: group:group-email@example.com   
+
+Hence, the correct command you need run is as follows : 
+
+gcloud functions add-invoker-policy-binding function-storage-to-pubsub \
+    --region="europe-west12" \
+    --member="serviceAccount:storage-to-pubsub@mainproject-01.iam.gserviceaccount.com"
+
+#### role/pubsub.publisher
+gcloud projects add-iam-policy-binding mainproject-01 \
+    --member="serviceAccount:storage-to-pubsub@mainproject-01.iam.gserviceaccount.com" \
+    --role="roles/pubsub.publisher"
+
+NOTICE : 
+ If you want to see what are the granted permissions to a service account you can use : 
+
+ gcloud projects get-iam-policy PROJECT_ID \
+    --flatten="bindings[].members" \
+    --format="table(bindings.role)" \
+    --filter="bindings.members:serviceAccount:SERVICE_ACCOUNT_EMAIL"
+
