@@ -1,0 +1,86 @@
+swagger: '2.0'
+info:
+  title: internesteco - The API with Google Cloud Functions
+  description: API to interface between clients and Google Cloud Functions
+  version: 1.0.0
+basePath: /v1
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: query
+security:
+  - api_key: []
+x-google-management:
+  metrics:
+    - name: "application-requests"
+      displayName: "Application requests"
+      valueType: INT64
+      metricKind: DELTA
+      description: "Number of requests from the application"
+  quota:
+    limits:
+      - name: "application-limit"
+        metric: "application-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10000
+schemes:
+  - https
+produces:
+  - application/zip
+consumes:
+  - application/zip
+paths:
+  /appZip:
+    post:
+      tags:
+        - application
+      summary: zip file from application
+      description: Receive a base64 encoded string (zip file) from the application
+      operationId: appzip
+      x-google-backend:
+        address: https://europe-west12-app-internships.cloudfunctions.net/function-proxy
+      consumes:
+        - application/zip
+      parameters:
+        - in: body
+          name: file
+          required: true
+          description: Base64 encoded string of the zip file
+          schema:
+            $ref: '#/definitions/appzip'
+      responses:
+        '200':
+          description: File uploaded successfully
+        '401': 
+          $ref: '#/responses/UnauthorizedError'
+      security:
+        - api_key: []
+      x-google-quota:
+        metricCosts:
+          "application-requests": 1
+definitions:
+ #The first object
+  appzip:
+    type: object
+    properties:
+      fileContent:
+        type: string
+        format: byte
+        description: Base64-encoded string representing the contents of the ZIP file
+      format:
+        type: string
+        description: the format of the received file
+    required:
+      - fileContent
+      - format
+#Global responses
+responses:
+  UnauthorizedError:
+    description:  Authentication information is missing or invalid
+    headers:
+      wwwAuthenticate:
+        type: string
+        
+        

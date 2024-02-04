@@ -1,0 +1,10 @@
+GET https://europe-west1-mainproject-01.cloudfunctions.net/testproxy
+
+GET https://europe-west1-mainproject-01.cloudfunctions.net/testproxy?apikey=AIzaSyDMi8gNkkaCnO1DlNtOMQ5R1VnaAJ7-56I
+
+POST https://europe-west1-mainproject-01.cloudfunctions.net/testproxy?apikey=AIzaSyDMi8gNkkaCnO1DlNtOMQ5R1VnaAJ7-56I
+Content-Type: application/json
+```
+{
+    "name" : "test"
+}

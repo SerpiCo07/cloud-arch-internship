@@ -1,0 +1,41 @@
+swagger: '2.0'
+info:
+  title: internesteco
+  description: Sample API on API Gateway with a Google Cloud Functions backend
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /hello:
+    get:
+      summary: Greet a user
+      operationId: helloGet
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/helloGET
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: string
+    put:
+      summary: Update a greeting
+      operationId: helloPut
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/helloPUT
+      responses:
+        '200':
+          description: Update successful
+          schema:
+            type: string
+    delete:
+      summary: Delete a greeting
+      operationId: helloDelete
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/helloDELETE
+      responses:
+        '200':
+          description: Deletion successful
+          schema:
+            type: string

@@ -1,0 +1,175 @@
+swagger: '2.0'
+info:
+  title: internesteco - The API with Google Cloud Functions
+  description: API to interface between clients and Google Cloud Functions
+  version: 1.0.0
+basePath: /v1
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: query
+security:
+  - api_key: []
+x-google-backend:
+  address:
+x-google-management:
+  metrics:
+    - name: "application-requests"
+      displayName: "Application requests"
+      valueType: INT64
+      metricKind: DELTA
+      description: "Number of requests from the application"
+    - name: "system-requests"
+      displayName: "System requests"
+      valueType: INT64
+      metricKind: DELTA
+      description: "Number of responses from the second Google Cloud Function"
+    - name: "API-requests"
+      displayName: "API requests"
+      valueType: INT64
+      metricKind: DELTA
+      description: "Number of requests from API Gateway to Pub/sub - backend"
+  quota:
+    limits:
+      - name: "application-limit"
+        metric: "application-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10000
+      - name: "system-limit"
+        metric: "system-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10000
+      - name: "API-limit"
+        metric: "API-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10000
+
+schemes:
+  - https
+produces:
+  - application/zip
+consumes:
+  - application/zip
+paths:
+  /appZip:
+    post:
+      tags:
+        - application
+      summary: zip file from application
+      description: Receive a base64 encoded string (zip file) from the application
+      operationId: appzip
+      consumes:
+        - application/zip
+      parameters:
+        - in: body
+          name: file
+          required: true
+          description: Base64 encoded string of the zip file
+          schema:
+            $ref: '#/definitions/processzip'
+      responses:
+        '200':
+          description: File uploaded successfully
+        '401': 
+          $ref: '#/responses/UnauthorizedError'
+      security:
+        - api_key: []
+      x-google-quota:
+        metricCosts:
+          "application-requests": 1
+
+  /forwardZip:
+    post:
+      summary: Forward zip file to the first Google Cloud Function
+      operationId: forwardzip
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-1
+      consumes:
+        - application/zip
+      parameters:
+        - in: body
+          name: file
+          required: true
+          description: Zip file to be forwarded
+          schema:
+            $ref: '#/definitions/processzip'
+      responses:
+        '200':
+          description: Zip file processed successfully
+        '401':
+          $ref: '#/responses/UnauthorizedError'
+      security:
+        - api_key: []
+
+  /systemZip:
+    post:
+      summary: Receive a zip file from the second Google Cloud Function
+      operationId: systemzip
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-2
+      produces:
+        - application/zip
+      consumes:
+        - application/zip
+      parameters:
+        - in: body
+          name: systemzip
+          required: true
+          description: zip file is received from the second Google Cloud Function
+          schema:
+            $ref: '#/definitions/systemzip'
+      responses:
+        '200':
+          description: Zip file received successfully
+        '404':
+          description: Zip file not found
+      security:
+        - api_key: []
+
+#definitions section:
+
+definitions:
+ 
+ #The first object
+  processzip:
+    type: object
+    properties:
+      fileContent:
+        type: string
+        format: byte
+        description: Base64-encoded string representing the contents of the ZIP file
+      format:
+        type: string
+        description: the format of the received file
+    required:
+      - fileContent
+      - format
+
+ #The second object
+  systemzip:
+    type: object
+    properties:
+      fileContent:
+        type: string
+        format: byte
+        description: Base64-encoded string representing the contents of the ZIP file
+      format:
+        type: string
+        description: the format of the file to be received
+    required:
+      - fileContent
+      - format
+
+#Global responses
+responses:
+  UnauthorizedError:
+    description:  Authentication information is missing or invalid
+    headers:
+      wwwAuthenticate:
+        type: string
+        
+        

@@ -1,0 +1,66 @@
+swagger: '2.0'
+info:
+  title: internesteco - The API with Google Cloud Functions
+  description: API to interface between clients and Google Cloud Functions
+  version: 1.0.0
+basePath: /v1
+schemes:
+  - https
+produces:
+  - application/json
+  - application/zip
+consumes:
+  - multipart/form-data
+  - application/json
+paths:
+  /uploadZip:
+    post:
+      summary: Receive a zip file from the application
+      operationId: uploadZip
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: file
+          required: true
+          description: Zip file to be uploaded
+          type: string
+      responses:
+        '200':
+          description: File uploaded successfully
+
+  /processZip:
+    post:
+      summary: Forward zip file to the first Google Cloud Function
+      operationId: processZip
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-1
+      consumes:
+        - application/octet-stream
+      parameters:
+        - in: body
+          name: file
+          required: true
+          description: Zip file to be processed
+          schema:
+            type: string
+            format: binary
+      responses:
+        '200':
+          description: Zip file processed successfully
+
+  /downloadZip:
+    get:
+      summary: Receive a zip file from the second Google Cloud Function
+      operationId: downloadZip
+      x-google-backend:
+        address: https://europe-west1-mainproject-01.cloudfunctions.net/function-2
+      produces:
+        - application/zip
+      responses:
+        '200':
+          description: Zip file received successfully
+          schema:
+            type: string
+        '404':
+          description: Zip file not found
