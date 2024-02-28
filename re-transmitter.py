@@ -27,4 +27,3 @@ def publish_object_details(event, context):
         
         print(f"Published object details to {destination_topic_path}")
 
-# Note: Ensure to replace 'DESTINATION_TOPIC_NAME' with your actual destination topic name.
