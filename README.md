@@ -86,10 +86,24 @@ NOTICE :
     --format="table(bindings.role)" \
     --filter="bindings.members:serviceAccount:SERVICE_ACCOUNT_EMAIL"
 
-## Developing DLQ watcher (GCF that listens to DLQ-sub )
+## The 2nd Google Cloud Function-DLQ watcher (GCF that listens to DLQ-sub )
 
  We want the second Google Cloud Function (GCF) to act as a notifier to signal Google Cloud Storage (GCS) when a message ends up in the Dead Letter Queue (DLQ) subscription. However GCS itself doesn't have a built-in mechanism to respond to such signals or notifications directly from a GCF.
 
  However, we can simulate a notification or signal system using GCS features like metadata updates or creating a marker file in the bucket to indicate attention is needed for a specific object.
 
   GCF has to have appropriate IAM permissions for accessing GCS and modifying object metadata (roles/storage.objectAdmin or a custom role with storage.objects.get and storage.objects.update permissions).
+
+
+## The 2nd Google Cloud Function - re-transmitter 
+
+  To achieve the setup where a third Google Cloud Function (GCF3) is triggered by changes in the metadata of objects within a Google Cloud Storage (GCS) bucket, and then publishes the details of those objects to a Pub/Sub topic, you will use GCS event notifications along with Cloud Functions and Pub/Sub.
+
+### Enable Pub/Sub Notifications for your GCS Bucket
+ 
+ Set up a Pub/Sub notification for your GCS bucket to publish events to a Pub/Sub topic. This is generally done for OBJECT_FINALIZE and OBJECT_METADATA_UPDATE events. 
+
+ '''gsutil notification create -t TOPIC_NAME -f json gs://BUCKET_NAME '''
+
+
+
