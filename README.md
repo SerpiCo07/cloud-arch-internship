@@ -94,10 +94,22 @@ NOTICE :
 
   GCF has to have appropriate IAM permissions for accessing GCS and modifying object metadata (roles/storage.objectAdmin or a custom role with storage.objects.get and storage.objects.update permissions).
 
+  Use the following command to deploy the python script and requirements.txt on GCF 
+
+  gcloud functions deploy dlq_signal_function \
+    --runtime python39 \
+    --trigger-topic YOUR_DLQ_TOPIC_NAME \
+    --set-env-vars BUCKET_NAME='your-bucket-name' \
+    --entry-point dlq_signal_function \
+    --source ./path/to/your/package_or_script \
+    --region YOUR_FUNCTION_REGION \
+    --project YOUR_PROJECT_ID
+
 
 ## The 2nd Google Cloud Function - re-transmitter 
 
   To achieve the setup where a third Google Cloud Function (GCF3) is triggered by changes in the metadata of objects within a Google Cloud Storage (GCS) bucket, and then publishes the details of those objects to a Pub/Sub topic, you will use GCS event notifications along with Cloud Functions and Pub/Sub.
+
 
 ### Enable Pub/Sub Notifications for your GCS Bucket
  
@@ -107,3 +119,7 @@ NOTICE :
 
 
 
+REMINDER : 
+Next time, add the JSON key for the service account in the correct path of the system environment
+
+Also apparently, I didn't develope the 1st Google Cloud Function !!
