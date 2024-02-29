@@ -121,5 +121,3 @@ NOTICE :
 
 REMINDER : 
 Next time, add the JSON key for the service account in the correct path of the system environment
-
-Also apparently, I didn't develope the 1st Google Cloud Function !!
