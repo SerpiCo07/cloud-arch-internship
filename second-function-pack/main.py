@@ -32,7 +32,7 @@ class GCSObjectManager:
             logging.error(f"Failed to update metadata for {object_name} in {self.bucket_name}. Error: {e}")
             return False
 
-def dlq_signal_function(event: Dict, context: 'google.cloud.functions.Context'):
+def dlq_signal_function(event: Dict, context):
     """
     Triggered by messages on the DLQ subscription. Extracts the object name and signals GCS.
     """
