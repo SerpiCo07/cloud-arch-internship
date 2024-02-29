@@ -3,6 +3,7 @@ import base64
 import json
 import logging
 from typing import Dict
+import os 
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -40,16 +41,21 @@ def dlq_signal_function(event: Dict, context):
         message_content = base64.b64decode(event['data']).decode('utf-8')
         message_json = json.loads(message_content)
 
-        # Extract bucket name and object name
-        bucket_name = message_json.get('bucket')
+        # Use an environment variable for the bucket name
+        bucket_name = os.getenv('BUCKET_NAME')
+
+        if not bucket_name:
+            logging.error("Bucket name environment variable (BUCKET_NAME) not set.")
+            return
+
         object_name = message_json.get('filename')
 
-        if bucket_name and object_name:
+        if object_name:
             # Create an instance of GCSObjectManager and update object metadata as a signal
             gcs_manager = GCSObjectManager(bucket_name)
             metadata = {"dlq-flagged": "true"}
             gcs_manager.update_object_metadata(object_name, metadata)
         else:
-            logging.warning("Bucket name or object name not found in the DLQ message.")
+            logging.warning("Object name not found in the DLQ message.")
     else:
         logging.warning("No data found in the DLQ message.")
