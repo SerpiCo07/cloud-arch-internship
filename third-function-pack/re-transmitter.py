@@ -9,13 +9,17 @@ from typing import Dict, Any
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Dynamically obtain the current project ID
-_, project_id = default()
 
 # Initialize the Pub/Sub client
 publisher = pubsub_v1.PublisherClient()
 
-# Retrieve environment variable for the topic name
+# Retrieve environment variable for the topic name and project ID
+
+project_id = os.getenv('GCP_PROJECT_ID')
+if not project_id:
+    logging.error("Environment variable 'GCP_PROJECT_ID' not set.")
+    raise EnvironmentError("Environment variable 'GCP_PROJECT_ID' not set.")
+
 topic_name = os.getenv('TOPIC_NAME')
 if not topic_name:
     logging.error("Environment variable 'TOPIC_NAME' not set.")
