@@ -16,12 +16,12 @@ _, project_id = default()
 publisher = pubsub_v1.PublisherClient()
 
 # Use environment variables for the retransmitted topic name
-retransmitted_topic_name = os.getenv('RETRANSMITTED_TOPIC_NAME')
-if not retransmitted_topic_name:
-    logging.error("Environment variable 'RETRANSMITTED_TOPIC_NAME' not set.")
-    exit(1)  # Exit if the required environment variable is not set
+topic_name = os.getenv('TOPIC_NAME')
+if not topic_name:
+    logging.error("Environment variable 'TOPIC_NAME' not set.")
+    raise EnvironmentError("Environment variable 'TOPIC_NAME' not set.")
 
-topic_path = publisher.topic_path(project_id, retransmitted_topic_name)
+topic_path = publisher.topic_path(project_id, topic_name)
 
 def publish_to_topic(object_info: Dict[str, Any]):
     """Publishes object information to the specified Pub/Sub topic."""

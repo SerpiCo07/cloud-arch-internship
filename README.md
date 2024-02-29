@@ -117,6 +117,9 @@ NOTICE :
 
   This function will filter the events to process only those where the object's metadata contains "dlq-flagged = true". Then, it publishes the object's name to the retransmitted-topic.
 
+  Set the "TOPIC_NAME" and "BUCKET_NAME" environment variables through the "Google Cloud Console" or the "gcloud command line" during deployment, ensuring they match your actual Pub/Sub topic and GCS bucket names.
+
+
 
 ### Enable Pub/Sub Notifications for your GCS Bucket
  
