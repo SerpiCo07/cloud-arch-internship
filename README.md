@@ -106,9 +106,16 @@ NOTICE :
     --project YOUR_PROJECT_ID
 
 
-## The 2nd Google Cloud Function - re-transmitter 
+    If we wanted to use Google Cloud console to deploy this function , we must do the following :
+    - import OS
+    - under "Runtime, build, connections and security settings" >> "Runtime environment variables" add BUCKET_NAME
+
+
+## The 3rd Google Cloud Function - re-transmitter 
 
   To achieve the setup where a third Google Cloud Function (GCF3) is triggered by changes in the metadata of objects within a Google Cloud Storage (GCS) bucket, and then publishes the details of those objects to a Pub/Sub topic, you will use GCS event notifications along with Cloud Functions and Pub/Sub.
+
+  This function will filter the events to process only those where the object's metadata contains "dlq-flagged = true". Then, it publishes the object's name to the retransmitted-topic.
 
 
 ### Enable Pub/Sub Notifications for your GCS Bucket
@@ -117,7 +124,3 @@ NOTICE :
 
  '''gsutil notification create -t TOPIC_NAME -f json gs://BUCKET_NAME '''
 
-
-
-REMINDER : 
-Next time, add the JSON key for the service account in the correct path of the system environment
