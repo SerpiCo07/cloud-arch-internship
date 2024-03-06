@@ -13,7 +13,7 @@ Within  ```the Google-Cloud-Storage``` branch, can be found:
 - The Storage client pack, which includes the script for uploading files to Google Cloud Storage (GCS).
 - The First, Second, and Third Functions Pack, responsible for managing the retrieval of object names from a bucket, publication on Pub/Sub, and retransmission in the event of a failure.
 
-## Technologies**
+## Technologies
 
 Cloud Provider: Google Cloud Platform
 Scripting: Python
