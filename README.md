@@ -1,6 +1,6 @@
 In this documentation, I have provided a step-by-step guide on how to create a simple web application using Flask and how to set up a cluster using Google Kubernetes Engine (GKE), followed by instructions on deploying the application onto GKE.
 
-# Web-app using FLASK 
+## Web-app using FLASK 
 This flask app is supposed to the following tasks :
     
 - Receive the name of an object from a pub/sub subscriber
@@ -9,7 +9,7 @@ This flask app is supposed to the following tasks :
 - Send its output to a topic on pub/sub
  
  
- Here's a high-level overview of steps you'd follow, along with adjustments to ensure smooth interaction between GCS and your Flask application running in GKE:
+ Here's a high-level overview of steps we follow, along with adjustments to ensure smooth interaction between GCS and your Flask application running in GKE:
 - Containerize Your Flask Application
 - Build and Push the Docker Image
 - Prepare GKE for Deployment
@@ -21,6 +21,7 @@ Moreover, don't forget to adjust GCS and GKE for interaction :
         Since our application interacts with GCS, we should ensure our GKE pods have the correct permissions. With Workload Identity, we can bind Kubernetes service accounts to Google Cloud service accounts with the necessary GCS permissions.
 - Configuration :
         Manage sensitive configurations and credentials using Kubernetes Secrets or ConfigMaps, and reference these in your deployment configuration.
+
 ## Containerize Your Flask Application
 
 Enable the following APIs:
