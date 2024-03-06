@@ -15,8 +15,8 @@ Within  ```the Google-Cloud-Storage``` branch, can be found:
 
 ## Technologies
 
-Cloud Provider: Google Cloud Platform
-Scripting: Python
+- Cloud Provider: Google Cloud Platform
+- Scripting: Python
 
 ## Collaboration Guidelines
 
