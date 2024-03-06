@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-app
+        image: "europe-west12-docker.pkg.dev/app-internships/test-repo/flask-app:first"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: GOOGLE_APPLICATION_CREDENTIALS  # Path to the service account key file inside the container
+          value: "/var/secrets/google/key.json"
+        volumeMounts:  # Mounting the secret as a file inside the container
+        - name: google-cloud-key
+          mountPath: "/var/secrets/google"
+          readOnly: true
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+            ephemeral-storage: "1Gi"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+            ephemeral-storage: "1Gi"
+      volumes:  # Define a volume that references the secret
+      - name: google-cloud-key
+        secret:
+          secretName: my-service-account
