@@ -3,7 +3,7 @@ This repository is dedicated to the development of a comprehensive cloud archite
 
 ## Repository Structure and Project Components
 
-Within ```the Maste```r branch, the following can be located:
+Within ```the Master``` branch, the following can be located:
 
 - "Old versions" contains all prior scripts developed for the foundational architecture.
 - "Cluster-GKE" encompasses comprehensive details on configuration and execution of a web application on Google Kubernetes Engine (GKE).
